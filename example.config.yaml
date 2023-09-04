@@ -1,0 +1,19 @@
+# Playnite path
+playnite_path: ''
+
+# Home Assistant
+home_assistant_url: ''
+home_assistant_api_key: ''
+home_assistant_tv_entity: ''
+home_assistant_tv_source: ''
+
+# Audio
+default_audio_external: ''
+default_audio_pc: ''
+
+# Windows
+desktop_password: ''
+
+# Serial
+com_port: ''
+com_serial_number: ''

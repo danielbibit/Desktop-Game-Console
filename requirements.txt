@@ -1,0 +1,9 @@
+pyyaml
+keyboard
+pyautogui
+requests
+pyserial
+comtypes
+pystray
+pillow
+https://github.com/kdschlosser/pyWinCoreAudio/tarball/develop
