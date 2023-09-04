@@ -5,8 +5,6 @@ import keyboard
 import yaml
 import time
 
-import pystray
-from PIL import Image
 from automation.event_engine import EventEngine
 
 import automation.services.windows.xinput as xinput
@@ -14,6 +12,8 @@ import automation.services.windows.audio as win_audio
 import automation.windows as windows
 from automation.home_assistant import HomeAssistant
 from automation.xbox_controller import xboxController
+
+from automation.system_tray import WxApp
 
 def load_config():
     with open("config.yaml", "r") as stream:
@@ -105,20 +105,7 @@ if __name__ == '__main__':
     # xboxHome + dpad right
     event_engine.add_subscriber('0x408', keyboard.press_and_release, 'ctrl+alt+f1')
 
-    image = Image.open("tray_icon.png")
-
-    icon = pystray.Icon(
-        "DGA",
-        image,
-        "Game Automation",
-        menu=pystray.Menu(
-            pystray.MenuItem("Launch", tray_icon_click),
-            pystray.MenuItem("Exit", tray_icon_click)
-        )
-    )
-
     # Safe to call icon.run() on a thread when using Windows (per docs)
-    thread_icon = threading.Thread(target=icon.run, daemon=True).start()
-
-    while True:
-        time.sleep(1)
+    # thread_icon = threading.Thread(target=icon.run, daemon=True).start()
+    app = WxApp(event_engine=event_engine)
+    app.MainLoop()

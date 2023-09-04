@@ -7,3 +7,4 @@ comtypes
 pystray
 pillow
 https://github.com/kdschlosser/pyWinCoreAudio/tarball/develop
+wxPython
