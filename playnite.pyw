@@ -20,14 +20,6 @@ def load_config():
         return yaml.safe_load(stream)
 
 
-def tray_icon_click(icon, query):
-    if str(query) == "Exit":
-        icon.stop()
-        os._exit(1)
-    elif str(query) == "Launch":
-        print('launching')
-
-
 def action_callback(foo):
     print(foo)
 
