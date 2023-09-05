@@ -1,5 +1,6 @@
 import queue
 import threading
+import time
 
 class EventEngine():
     def __init__(self):
@@ -22,11 +23,10 @@ class EventEngine():
 
     def worker(self):
         while True:
-            while not self.__queue.empty():
-                event = self.__queue.get()
-                print('got event')
-                print(event)
-                self._process_event(event)
+            event = self.__queue.get()
+            print('got event')
+            print(event)
+            self._process_event(event)
 
     def run(self):
         print('Starting event engine')
