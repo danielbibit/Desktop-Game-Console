@@ -29,11 +29,13 @@ class Windows(os_interface.OSInterface):
     def is_locked(self) -> bool:
         return self.process_exists('LogonUI.exe')
 
-    def lock():
-        pass
+    def lock(self):
+        subprocess.call('rundll32.exe user32.dll,LockWorkStation')
+        time.sleep(0.5)
 
     def unlock(self, desktop_password: bytes, com_port: str):
         if self.is_locked():
+            print('Pc is locked, unlocking with keyboard')
             try:
                 usb_keyboard = serial_keyboard.new_arduino_connection(com_port)
 
@@ -42,12 +44,15 @@ class Windows(os_interface.OSInterface):
                     # 27 ascii - escape
                     usb_keyboard.write(b'write:27\n')
 
-                    usb_keyboard.write(b'print:' + desktop_password + b'\n')
+                    # usb_keyboard.write(b'print:' + desktop_password + b'\n')
+                    for char in desktop_password:
+                        usb_keyboard.write(b'write:' + str(char).encode() + b'\n')
 
                     # 10 ascii line feed
                     usb_keyboard.write(b'write:10\n')
-            except:
-                pass
+            except Exception as e:
+                print('Error while writing to keyboard')
+                print(e)
 
     def switch_display(self, mode: str):
         print('switch_display ' + mode)
