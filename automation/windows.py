@@ -41,8 +41,13 @@ class Windows(os_interface.OSInterface):
 
                 # https://www.arduino.cc/reference/en/language/functions/usb/keyboard/keyboardmodifiers/
                 with usb_keyboard:
-                    # 27 ascii - escape
-                    usb_keyboard.write(b'write:27\n')
+                    # 8 ascii - backspace
+                    usb_keyboard.write(b'write:8\n')
+
+                    # # 27 ascii - escape
+                    # usb_keyboard.write(b'write:27\n')
+
+                    time.sleep(0.5)
 
                     # usb_keyboard.write(b'print:' + desktop_password + b'\n')
                     for char in desktop_password:
