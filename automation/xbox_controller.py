@@ -1,10 +1,9 @@
 import threading
 import time
-from automation.interfaces.input import InputInterface
 import automation.services.windows.xinput as xinput
 
 
-class xboxController(InputInterface):
+class xboxController():
     def __init__(self, controller_number, event_engine):
         self.controller_number = controller_number
         self.event_engine = event_engine
@@ -23,10 +22,10 @@ class xboxController(InputInterface):
 
                 last_input = current_input
 
-            except Exception as e:
+            except Exception:
                 pass
 
     def run(self):
-        thread_input = threading.Thread(target=self.worker, daemon=True).start()
+        threading.Thread(target=self.worker, daemon=True).start()
 
 

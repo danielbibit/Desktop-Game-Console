@@ -18,8 +18,7 @@ class Audio:
                 del device
 
             pyWinCoreAudio.stop()
-            del devices
-        except:
+        except Exception:
             pass
 
 

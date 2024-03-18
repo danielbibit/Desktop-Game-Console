@@ -1,7 +1,8 @@
 # This code is a strip down version of the XInput-Python package by Zuzu_Typ
 # For the original code, https://github.com/Zuzu-Typ/XInput-Python
 
-import ctypes, ctypes.util
+import ctypes
+import ctypes.util
 
 from ctypes import Structure, POINTER
 

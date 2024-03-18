@@ -1,16 +1,11 @@
-import os
-import threading
-import keyboard
-
 import yaml
 import time
 
 from automation.event_engine import EventEngine
 
-import automation.services.windows.xinput as xinput
 import automation.services.windows.audio as win_audio
+import automation.services.mqtt as mqtt
 import automation.windows as windows
-from automation.home_assistant import HomeAssistant
 from automation.xbox_controller import xboxController
 
 from automation.system_tray import WxApp
@@ -20,42 +15,22 @@ def load_config():
         return yaml.safe_load(stream)
 
 
-def action_callback(foo):
-    print(foo)
-
-
-def action_launch(system, ha, audio, config):
-    system.unlock(bytes(config['desktop_password'].encode()), config['com_port'])
-
-    ha.turn_on_tv()
-
-    system.switch_display('external')
-
-    system.process_launch(config['playnite_path'])
-
-    ha.turn_off_light()
-
-    audio.set_default_external()
-
-
-def action_restore(system, ha, audio):
+def action_restore(system, audio):
     system.switch_display('internal')
 
     audio.set_default_internal()
 
+    time.sleep(3)
+
+    system.lock()
+
     time.sleep(5)
-
-    ha.restore_tv_state()
-
-    ha.restore_light_state()
 
 
 if __name__ == '__main__':
     print('Starting script')
 
     config = load_config()
-
-    ha = HomeAssistant(config['home_assistant_api_key'], config['home_assistant_url'])
 
     audio = win_audio.Audio(config)
 
@@ -67,35 +42,21 @@ if __name__ == '__main__':
     controller_listner = xboxController(0, event_engine)
     controller_listner.run()
 
-    # xboxHome + home(start)
-    event_engine.add_subscriber('0x410', action_launch, system, ha, audio, config)
+    mqtt_service = mqtt.MqttService(config, event_engine)
+    mqtt_service.run()
 
-    # xboxHome + view(select)
-    event_engine.add_subscriber('0x420', action_restore, system, ha, audio)
+    # # xboxHome + view(select)
+    # L3 + view(select)
+    event_engine.add_subscriber('0x60', action_restore, system, audio)
 
-    # xboxHome + A
-    event_engine.add_subscriber('0x1400', action_callback, 'debug')
+    event_engine.add_subscriber('MQTT_UNLOCK', system.unlock, bytes(config['desktop_password'].encode()), config['com_port'])
 
-    # xboxHome + B
-    event_engine.add_subscriber('0x2400', keyboard.press_and_release, 'alt+f4')
+    event_engine.add_subscriber('MQTT_DISPLAY_EXTERNAL', system.switch_display, 'external')
 
-    # xboxHome + X
-    event_engine.add_subscriber('0x4400', keyboard.press_and_release, 'alt+tab')
+    event_engine.add_subscriber('MQTT_LAUNCH', system.launch_steam_big_picture)
 
-    # xboxHome + Y
-    event_engine.add_subscriber('0x8400', system.move_mouse_out_screen)
+    event_engine.add_subscriber('MQTT_DISPLAY_INTERNAL', system.switch_display, 'internal')
 
-    # xboxHome + dpad up
-    event_engine.add_subscriber('0x401', keyboard.press_and_release, 'volume up')
-
-    # xboxHome + dpad down
-    event_engine.add_subscriber('0x402', keyboard.press_and_release, 'volume down')
-
-    # xboxHome + dpad left
-    event_engine.add_subscriber('0x404', keyboard.press_and_release, 'ctrl+alt+f1')
-
-    # xboxHome + dpad right
-    event_engine.add_subscriber('0x408', keyboard.press_and_release, 'ctrl+alt+f1')
 
     # Safe to call icon.run() on a thread when using Windows (per docs)
     # thread_icon = threading.Thread(target=icon.run, daemon=True).start()

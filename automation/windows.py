@@ -2,10 +2,9 @@ import subprocess
 import time
 import pyautogui
 import automation.services.serial_keyboard as serial_keyboard
-import automation.interfaces.os as os_interface
 
 pyautogui.FAILSAFE = False
-class Windows(os_interface.OSInterface):
+class Windows():
     def __init__(self, config):
         pass
 
@@ -17,14 +16,6 @@ class Windows(os_interface.OSInterface):
         last_line = output.strip().split('\r\n')[-1]
         # because Fail message could be translated
         return last_line.lower().startswith(process_name.lower())
-
-
-    def process_launch(self, playnite_path: str):
-        # Miminize all windows, solve focus issues
-        pyautogui.hotkey('winleft', 'm')
-        time.sleep(0.5)
-
-        results = subprocess.Popen([playnite_path])
 
     def is_locked(self) -> bool:
         return self.process_exists('LogonUI.exe')
@@ -41,8 +32,13 @@ class Windows(os_interface.OSInterface):
 
                 # https://www.arduino.cc/reference/en/language/functions/usb/keyboard/keyboardmodifiers/
                 with usb_keyboard:
-                    # 27 ascii - escape
-                    usb_keyboard.write(b'write:27\n')
+                    # 8 ascii - backspace
+                    usb_keyboard.write(b'write:8\n')
+
+                    # # 27 ascii - escape
+                    # usb_keyboard.write(b'write:27\n')
+
+                    time.sleep(0.5)
 
                     # usb_keyboard.write(b'print:' + desktop_password + b'\n')
                     for char in desktop_password:
@@ -56,6 +52,7 @@ class Windows(os_interface.OSInterface):
 
     def switch_display(self, mode: str):
         print('switch_display ' + mode)
+
         if mode == 'external':
             subprocess.call('displayswitch.exe 4')
 
@@ -66,11 +63,11 @@ class Windows(os_interface.OSInterface):
             subprocess.call('displayswitch.exe /extend')
 
 
-    def move_mouse():
-        pass
-
-    def switch_audio():
-        pass
-
-    def move_mouse_out_screen(self):
-        pyautogui.moveRel(8000, 8000)
+    def launch_steam_big_picture(self):
+        pyautogui.hotkey('winleft', 'm')
+        time.sleep(0.5)
+        pyautogui.hotkey('winleft', 'r')
+        time.sleep(1)
+        pyautogui.write('steam://open/gamepadui')
+        time.sleep(1)
+        pyautogui.press('enter')

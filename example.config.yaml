@@ -1,11 +1,4 @@
-# Playnite path
-playnite_path: ''
-
-# Home Assistant
-home_assistant_url: ''
-home_assistant_api_key: ''
-home_assistant_tv_entity: ''
-home_assistant_tv_source: ''
+steam_path: ''
 
 # Audio
 default_audio_external: ''
