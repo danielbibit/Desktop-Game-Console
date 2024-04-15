@@ -9,11 +9,11 @@ class MqttService:
         self.event_engine = event_engine
 
     def _on_connect(self, client, userdata, flags, rc):
-        print("Mqtt connected with result code "+str(rc))
+        print("Mqtt connected with result code " + str(rc))
         client.subscribe("desktop_automation/command")
 
     def _on_disconnect(self, client, userdata, rc):
-        print("Mqtt disconnected with result code "+str(rc))
+        print("Mqtt disconnected with result code " + str(rc))
 
     def _on_message(self, client, userdata, msg):
         print(msg.topic+" "+str(msg.payload))

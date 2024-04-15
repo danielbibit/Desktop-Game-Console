@@ -18,6 +18,8 @@ class Windows():
         return last_line.lower().startswith(process_name.lower())
 
     def is_locked(self) -> bool:
+        # This will not work if another user is logged in
+        # Windows will spawn another instance of LogonUI.exe
         return self.process_exists('LogonUI.exe')
 
     def lock(self):
@@ -27,6 +29,11 @@ class Windows():
     def unlock(self, desktop_password: bytes, com_port: str):
         if self.is_locked():
             print('Pc is locked, unlocking with keyboard')
+
+            # Make sure to not write password somewhere else if another user is logged in
+            pyautogui.hotkey('winleft', 'm')
+            time.sleep(0.5)
+
             try:
                 usb_keyboard = serial_keyboard.new_arduino_connection(com_port)
 
@@ -62,6 +69,7 @@ class Windows():
         elif mode == 'extend':
             subprocess.call('displayswitch.exe /extend')
 
+        time.sleep(2)
 
     def launch_steam_big_picture(self):
         pyautogui.hotkey('winleft', 'm')
