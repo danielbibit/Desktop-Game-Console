@@ -69,8 +69,6 @@ class Windows():
         elif mode == 'extend':
             subprocess.call('displayswitch.exe /extend')
 
-        time.sleep(2)
-
     def launch_steam_big_picture(self):
         pyautogui.hotkey('winleft', 'm')
         time.sleep(0.5)
