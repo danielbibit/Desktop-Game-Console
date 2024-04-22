@@ -7,3 +7,4 @@ comtypes
 https://github.com/kdschlosser/pyWinCoreAudio/tarball/develop
 wxPython
 paho-mqtt
+pywin32

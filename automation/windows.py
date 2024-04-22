@@ -1,6 +1,10 @@
 import subprocess
 import time
 import pyautogui
+import ctypes
+import pywintypes
+import win32api
+import win32con
 import automation.services.serial_keyboard as serial_keyboard
 
 pyautogui.FAILSAFE = False
@@ -77,3 +81,21 @@ class Windows():
         pyautogui.write('steam://open/gamepadui')
         time.sleep(1)
         pyautogui.press('enter')
+
+    def get_current_resolution(self):
+        user32 = ctypes.windll.user32
+
+        return user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
+
+    def set_display_resolution(self, width: int, height: int):
+        devmode = pywintypes.DEVMODEType()
+
+        devmode.PelsWidth = width
+        devmode.PelsHeight = height
+
+        # Set the display resolution as defautl
+        flags = win32con.CDS_UPDATEREGISTRY
+
+        devmode.Fields = win32con.DM_PELSWIDTH | win32con.DM_PELSHEIGHT
+
+        win32api.ChangeDisplaySettings(devmode, flags)
