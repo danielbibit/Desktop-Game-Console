@@ -1,17 +1,8 @@
-import os
 import argparse
-import yaml
 import time
 import pyautogui
 import automation.windows as windows
-
-
-def load_config():
-    script_path = os.path.dirname(__file__)
-
-    with open(os.path.join(script_path, "config.yaml"), "r") as stream:
-        return yaml.safe_load(stream)
-
+from automation.config import config
 
 def sunshine_do(system, resolution):
     system.unlock(bytes(config['desktop_password'].encode()), config['com_port'])
@@ -37,6 +28,8 @@ def sunshine_do(system, resolution):
 
 
 def sunshine_undo(system):
+    # Sunshine close steam
+
     system.set_display_resolution(3840, 2160)
 
     time.sleep(1)
@@ -47,13 +40,10 @@ def sunshine_undo(system):
 
     system.lock()
 
-    # Sunshine close steam
-
 
 if __name__ == '__main__':
     print('Starting script')
 
-    config = load_config()
     parser = argparse.ArgumentParser()
     system = windows.Windows(config)
 

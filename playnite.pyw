@@ -1,4 +1,3 @@
-import yaml
 import time
 
 from automation.event_engine import EventEngine
@@ -6,13 +5,10 @@ from automation.event_engine import EventEngine
 import automation.services.windows.audio as win_audio
 import automation.services.mqtt as mqtt
 import automation.windows as windows
+
 from automation.xbox_controller import xboxController
-
+from automation.config import config
 from automation.system_tray import WxApp
-
-def load_config():
-    with open("config.yaml", "r") as stream:
-        return yaml.safe_load(stream)
 
 
 def action_restore(system, audio):
@@ -29,8 +25,6 @@ def action_restore(system, audio):
 
 if __name__ == '__main__':
     print('Starting script')
-
-    config = load_config()
 
     audio = win_audio.Audio(config)
 
