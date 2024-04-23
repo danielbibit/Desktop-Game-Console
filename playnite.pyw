@@ -20,8 +20,6 @@ def action_restore(system, audio):
 
     system.lock()
 
-    time.sleep(5)
-
 
 if __name__ == '__main__':
     print('Starting script')
