@@ -22,6 +22,11 @@ pythonw.exe playnite.pyw
 taskkill /IM pythonw.exe /F
 ```
 
+## Sunshine
+```sh
+cmd /C python C:\Daniel\Code\desktop_gaming_automation\console.py --resolution %SUNSHINE_CLIENT_WIDTH% %SUNSHINE_CLIENT_HEIGHT% --command sunshine_do
+cmd /C python C:\Daniel\Code\desktop_gaming_automation\console.py --command sunshine_undo
+```
 ## TODO
 * deal with exceptions
 * log errors
