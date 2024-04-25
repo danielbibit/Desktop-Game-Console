@@ -2,6 +2,7 @@ homeassistant_api_key
 automations.yaml
 config.yaml
 *.log
+scripts/dev_temp/*
 
 
 
