@@ -34,32 +34,21 @@ class Windows():
         if self.is_locked():
             print('Pc is locked, unlocking with keyboard')
 
+            keyboard = serial_keyboard.SerialKeyboard(com_port)
             # Make sure to not write password somewhere else if another user is logged in
             pyautogui.hotkey('winleft', 'm')
+
             time.sleep(0.5)
 
-            try:
-                usb_keyboard = serial_keyboard.new_arduino_connection(com_port)
+            keyboard.write_keycode(serial_keyboard.hid_keycodes['BACKSPACE'])
 
-                # https://www.arduino.cc/reference/en/language/functions/usb/keyboard/keyboardmodifiers/
-                with usb_keyboard:
-                    # 8 ascii - backspace
-                    usb_keyboard.write(b'write:8\n')
+            time.sleep(0.5)
 
-                    # # 27 ascii - escape
-                    # usb_keyboard.write(b'write:27\n')
+            keyboard.type_string(desktop_password.decode())
 
-                    time.sleep(0.5)
+            time.sleep(0.5)
 
-                    # usb_keyboard.write(b'print:' + desktop_password + b'\n')
-                    for char in desktop_password:
-                        usb_keyboard.write(b'write:' + str(char).encode() + b'\n')
-
-                    # 10 ascii line feed
-                    usb_keyboard.write(b'write:10\n')
-            except Exception as e:
-                print('Error while writing to keyboard')
-                print(e)
+            keyboard.write_keycode(serial_keyboard.hid_keycodes['ENTER'])
 
     def switch_display(self, mode: str):
         print('switch_display ' + mode)
