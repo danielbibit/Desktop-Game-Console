@@ -41,6 +41,9 @@ if __name__ == '__main__':
 
     event_engine.add_subscriber('MQTT_DISPLAY_INTERNAL', system.switch_display, 'internal')
 
+    event_engine.add_subscriber('MQTT_AUDIO_EXTERNAL', audio.set_default_external)
+
+    event_engine.add_subscriber('MQTT_AUDIO_INTERNAL', audio.set_default_internal)
 
     # Safe to call icon.run() on a thread when using Windows (per docs)
     # thread_icon = threading.Thread(target=icon.run, daemon=True).start()
