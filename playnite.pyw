@@ -6,7 +6,6 @@ import automation.services.windows.audio as win_audio
 import automation.services.mqtt as mqtt
 import automation.windows as windows
 
-from automation.xbox_controller import xboxController
 from automation.config import config
 from automation.system_tray import WxApp
 
@@ -31,15 +30,8 @@ if __name__ == '__main__':
     event_engine = EventEngine()
     event_engine.run()
 
-    controller_listner = xboxController(0, event_engine)
-    controller_listner.run()
-
     mqtt_service = mqtt.MqttService(config, event_engine)
     mqtt_service.run()
-
-    # # xboxHome + view(select)
-    # L3 + view(select)
-    event_engine.add_subscriber('0x60', action_restore, system, audio)
 
     event_engine.add_subscriber('MQTT_UNLOCK', system.unlock, bytes(config['desktop_password'].encode()), config['com_port'])
 
