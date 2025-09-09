@@ -6,18 +6,12 @@ from automation.config import config
 
 def sunshine_do(system, resolution):
     system.unlock(bytes(config['desktop_password'].encode()), config['com_port'])
-
     time.sleep(1)
 
     system.switch_display('external')
-
     time.sleep(1)
 
-    if resolution[0] == 1280 and resolution[1] == 800:
-        system.set_display_resolution(1680, 1050)
-    elif resolution[0] == 1920 and resolution[1] == 1080:
-        system.set_display_resolution(1920, 1080)
-
+    system.set_display_resolution(resolution[0], resolution[1])
     time.sleep(2)
 
     pyautogui.hotkey('winleft', 'm')
