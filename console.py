@@ -14,8 +14,12 @@ def sunshine_do(system, resolution):
     system.set_display_resolution(resolution[0], resolution[1])
     time.sleep(2)
 
+    # Hide all windows
     pyautogui.hotkey('winleft', 'm')
+    time.sleep(1)
 
+    # Move to a clear desktop
+    pyautogui.hotkey('winleft', 'ctrl', 'd')
     time.sleep(1)
 
     # Sunshine launch steam
@@ -23,13 +27,16 @@ def sunshine_do(system, resolution):
 
 def sunshine_undo(system):
     # Sunshine close steam
+    time.sleep(1)
+
+    # Close current desktop
+    pyautogui.hotkey('winleft', 'ctrl', 'f4')
+    time.sleep(1)
 
     system.set_display_resolution(3840, 2160)
-
     time.sleep(1)
 
     system.switch_display('internal')
-
     time.sleep(1)
 
     system.lock()
